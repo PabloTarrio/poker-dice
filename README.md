@@ -77,6 +77,7 @@ python model_definition.py
 | tensorflow | 2.18.0 | Deep learning framework |
 | opencv-python | 4.13.0.92 | Image processing |
 | numpy | 2.0.2 | Numerical computing |
+| rpicam-tcp-client | 1.0.0 | Raspberry Pi Camera TCP streaming |
 
 ## Roadmap
 

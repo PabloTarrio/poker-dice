@@ -5,3 +5,6 @@ opencv-python==4.13.0.92
 
 # Numerical computing
 numpy==2.0.2
+
+# Raspberry Pi Camera TCP client
+rpicam-tcp-client @ git+https://github.com/PabloTarrio/rpicam-tcp-client.git

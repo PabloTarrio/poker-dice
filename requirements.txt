@@ -1,0 +1,7 @@
+tensorflow==2.18.0
+
+# Image processing
+opencv-python==4.13.0.92
+
+# Numerical computing
+numpy==2.0.2

@@ -1,0 +1,25 @@
+{
+    "_comment": "Camera configuration for dataset capture. Adjust these values to your lighting conditions.",
+    
+    "connection": {
+        "host": "172.16.125.63",
+        "port": 5001
+    },
+
+    "capture": {
+        "count": 100,
+        "output_dir": "data/raw"
+    },
+
+    "camera": {
+        "width": 640,
+        "height": 480,
+        "jpeg_quality": 95,
+        "sharpness": 4.0,
+        "contrast": 1.1,
+        "brightness": -0.1,
+        "saturation": 0.8,
+        "exposure_time": null,
+        "analogue_gain": null
+    }
+}

@@ -13,15 +13,17 @@ Neural network to classify individual poker dice faces (1-6) using Transfer Lear
 ## Arquitecture
 
 RPi Camera -> rpicam-tcp-client -> Image (224x224)
-|
-MobileNetV2 (ImageNet weigths)
-|
+↓
+Data Augmentation (flip, rotation, zoom)
+↓
+MobileNetV2 (ImageNet weights)
+↓
 GlobalAveragePooling2D
-|
+↓
 Dense (6, softmax) -> [0.005, 0.92, 0.01, 0.01, 0.01, 0.00]
-|
+↓
 Dice value: 2
-|
+↓
 5 Dice->-> "Full House"
 
 ### Model Summary
@@ -40,22 +42,23 @@ Dice value: 2
 ## Repository structure
 ```text
 poker-dice/
-|___ model_definition.py           # CNN architecture (MobileNetV2 + Dense(6))
-|___ capture_dataset.py            # Script to capture dice images from Raspberry Pi
-|___ capture_config.json           # Camera and capture configuration (copy and edit)
+|___ model_definition.py            # CNN architecture (MobileNetV2 + Dense(6))
+|___ preprocess_dataset.py          # Crop/resize raw images to 224x224
+|___ split_dataset.py               # Train/val/test split (70/15/15)
+|___ train.py                       # Training script (transfer learning + callbacks)
+|___ finetune.py                    # Optional fine-tuning of deep MobileNetV2 layers
+|___ capture_dataset.py             # Script to capture dice images from Raspberry Pi
+|___ capture_config.json            # Camera and capture configuration (copy and edit)
 |___ requirements.txt               # Exact dependencies versions
 |___ README.md
 |___ data/
-| |___ raw/                        # Original dice images captured from camera
-| |__|___ 1/
-| |__|___ 2/
-| |__|___ 3/
-| |__|___ 4/
-| |__|___ 5/
-| |__|___ 6/
-| |___ processed/                  # Preprocessed images ready for training
-|___ models/                       # Saved model weights after training
-|___ notebooks/                    # Jupyter noteboks for experiments
+| |___ raw/                         # Original dice images captured from camera
+| |___ processed/                   # Preprocessed images ready for training
+| |___ train/                       # Training split (70 images per class)
+| |___ val/                         # Validation split (15 images per class)
+| |___ test/                        # Test split (15 images per class)
+|___ models/                        # Saved model weights after training
+|___ notebooks/                     # Jupyter noteboks for experiments
 ```
 ## Setup
 
@@ -138,6 +141,18 @@ Press `SPACE` to capture each image. Press **Q** to quit.
 find data/raw -name "*.jpg" | wc -l # Should return 600
 ```
 
+## Training
+
+After capturing and preprocessing the dataset (`data/raw` → `data/processed` → `data/train`, `data/val`, `data/test`), you can train the classifier:
+
+```bash
+# Base training (MobileNetV2 frozen + data augmentation)
+python train.py --epochs 10 --batch-size 16 --output-model poker_mobilenetv2_base.keras
+
+# Optional fine-tuning of deeper MobileNetV2 layers
+python finetune.py --epochs 3 --fine-tune-at 100 --learning-rate 1e-4 --base-model-path poker_mobilenetv2_base.keras --output-model poker_mobilenetv2_finetuned.keras
+```
+
 ## Dependencies
 
 | Package | Version | Purpose |
@@ -154,9 +169,9 @@ find data/raw -name "*.jpg" | wc -l # Should return 600
 - [x] Add requirements.txt
 - [x] Implement dataset capture script (capture_dataset.py)
 - [x] Add configurable camera parameters (capture_config.json)
-- [ ] Capture full dataset (dice images, classes 1–6) (100 images x 6 classes = 600 total)
-- [ ] Preprocess and augment images
-- [ ] Train and evaluate model
+- [x] Capture full dataset (dice images, classes 1–6) (100 images x 6 classes = 600 total)
+- [x] Preprocess and augment images
+- [x] Train and evaluate model
 - [ ] Implement poker hand logic (pairs, full house, etc.)
 - [ ] Integrate with rpicam-tcp-client for real-time inference
 

@@ -7,3 +7,12 @@ data/processed/
 data/train/
 data/val/
 data/test/
+
+# Modelos entrenados
+*.h5
+*.keras
+
+# Opcional: historiales de entrenamiento, logs, etc.
+*.ckpt
+*.pb
+logs/

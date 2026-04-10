@@ -1,5 +1,6 @@
 import argparse
 import tensorflow as tf
+import os
 
 from model_definition import create_dice_model
 from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
@@ -46,7 +47,7 @@ def parse_args():
     parser.add_argument(
         "--output-model",
         type=str,
-        default="poker_mobilenetv3.h5",
+        default="models/poker_mobilenetv2_base.keras",
         help="Ruta donde se guardará el modelo entrenado",
     )
 
@@ -136,7 +137,8 @@ def main():
         epochs=args.epochs,
     )
 
-    # 6.Save trained model
+    # 6.Save trained model (create directory before if it not exists)
+    os.makedirs(os.path.dirname(args.output_model), exist_ok=True)
     model.save(args.output_model)
     
     print(f"Path to saved model: {args.output_model}")

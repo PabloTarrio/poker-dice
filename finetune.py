@@ -52,13 +52,13 @@ def parse_args():
     parser.add_argument(
         "--base-model-path",
         type=str,
-        default="poker_mobilenetv2_check.keras",
+        default="models/poker_mobilenetv2_base.keras",
         help="Ruta del modelo previamente entrenado (fase base)",
     )
     parser.add_argument(
         "--output-model",
         type=str,
-        default="poker_mobilenetv2_finetuned.h5",
+        default="models/poker_mobilenetv2_finetuned.keras",
         help="Ruta donde se guardará el modelo tras el fine-tuning",
     )
 

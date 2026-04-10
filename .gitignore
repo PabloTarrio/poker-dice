@@ -9,6 +9,7 @@ data/val/
 data/test/
 
 # Modelos entrenados
+models/
 *.h5
 *.keras
 
